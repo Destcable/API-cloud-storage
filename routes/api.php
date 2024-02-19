@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/authorization', [AuthController::class, 'authenticate'])->name('authorization');
+Route::post('/authorization', [AuthController::class, 'authenticate']);
 Route::post('/registration', [AuthController::class, 'register']);
 
 Route::middleware('auth:sanctum')->get('/logout', [AuthController::class, 'logout']);
