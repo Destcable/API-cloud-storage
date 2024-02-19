@@ -19,9 +19,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/authorization', [AuthController::class, 'authenticate']);
+Route::post('/authorization', [AuthController::class, 'authenticate'])->name('authorization');
 Route::post('/registration', [AuthController::class, 'register']);
-Route::get('/logout', [AuthController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->get('/logout', [AuthController::class, 'logout']);
-Route::middleware('web')->get('/logout', [AuthController::class, 'logout']);
+
+Route::get('/login', function () {
+    return response()->json([
+        'message' => 'Login failed'
+    ], 403);
+})->name('login');

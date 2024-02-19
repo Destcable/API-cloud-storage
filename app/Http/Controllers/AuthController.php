@@ -75,18 +75,13 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $user = $request->user();
-        var_dump(Auth::check());
+
         if ($user) {
             $user->tokens()->delete();
             return response()->json([
                 'success' => true,
                 'message' => 'Logout',
             ], 200);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Login failed',
-            ], 403);
         }
     }
 }
