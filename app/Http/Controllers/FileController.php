@@ -183,7 +183,28 @@ class FileController extends Controller
             $access->save();
         }
 
-        return response()->json(FileAccess::where('file_id', $file->file_id)->get());
+        $dataFileAccess = FileAccess::where('file_id', $file->file_id)->get();
+        
+        $response = [];
+        foreach ($dataFileAccess as $access) {
+            $userId = $access->user_id;
+        
+            $user = User::find($userId);
+        
+            if ($user) {
+                $firstName = $user->first_name;
+                $lastName = $user->last_name;
+                $email = $user->email;
+                
+                $response[] = [
+                    'fullname' => $firstName . ' ' . $lastName,
+                    'email' => $email,
+                    'type' => $access->type,
+                ];
+            }
+        }
+
+        return response()->json($response);
     }
 
 
