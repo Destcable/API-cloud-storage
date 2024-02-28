@@ -3,26 +3,18 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+use App\Http\Controllers\FileController;
 
 Route::post('/authorization', [AuthController::class, 'authenticate']);
 Route::post('/registration', [AuthController::class, 'register']);
 
 Route::middleware('auth:sanctum')->get('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->post('/files', [FileController::class, 'uploadFiles']);
+Route::middleware('auth:sanctum')->patch('/files/{file_id}', [FileController::class, 'rename']);
+Route::middleware('auth:sanctum')->delete('/files/{file_id}', [FileController::class, 'delete']);
+Route::middleware('auth:sanctum')->get('/files/{file_id}', [FileController::class, 'download']);
+Route::middleware('auth:sanctum')->post('/files/{file_id}/accesses', [FileController::class, 'addAccess']);
+Route::middleware('auth:sanctum')->delete('/files/{file_id}/accesses', [FileController::class, 'deleteAccess']);
 
 Route::get('/login', function () {
     return response()->json([
