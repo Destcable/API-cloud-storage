@@ -294,6 +294,12 @@ class FileController extends Controller
         return response()->json($response);
     }
 
+    public function getSharedFiles()
+    {
+        return $fileAccessesByUser = FileAccess::where('user_id', auth()->id())->where('author', 'co-author')->get();
+
+    }
+
     private function expolodeURL($url)
     { 
         $parts = explode('/', $url);

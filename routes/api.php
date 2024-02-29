@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->get('/files/{file_id}', [FileController::clas
 Route::middleware('auth:sanctum')->post('/files/{file_id}/accesses', [FileController::class, 'addAccess']);
 Route::middleware('auth:sanctum')->delete('/files/{file_id}/accesses', [FileController::class, 'deleteAccess']);
 Route::middleware('auth:sanctum')->get('/files/disk', [FileController::class, 'getFiles']);
+Route::middleware('auth:sanctum')->get('/shared', [FileController::class, 'getSharedFiles']);
 
 Route::get('/login', function () {
     return response()->json([
