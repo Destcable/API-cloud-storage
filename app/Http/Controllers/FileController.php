@@ -245,9 +245,53 @@ class FileController extends Controller
 
         $access->delete();
 
-        $usersWithAccess = FileAccess::where('file_id', $file->file_id)->get();
+        $dataFileAccess = FileAccess::where('file_id', $file->file_id)->get();
+        
+        $response = [];
+        foreach ($dataFileAccess as $access) {
+            $user = User::find($access->user_id);
+        
+            if ($user) {
+                $response[] = [
+                    'fullname' => $user->first_name . ' ' . $user->last_name,
+                    'email' => $user->email,
+                    'type' => $access->type,
+                ];
+            }
+        };
 
-        return response()->json($usersWithAccess);
+        return response()->json($response);
+    }
+
+    public function getFiles(Request $request)
+    {
+        $filesByUser = File::where('user_id', auth()->id())->get();
+        $response = [];
+        
+        foreach ($filesByUser as $file) {
+            $accesessByFiles = FileAccess::where('file_id', $file->file_id)->get();
+            
+            foreach ($accesessByFiles as $access) { 
+                $user = User::find($access->user_id);
+                
+                if ($user) {
+                    
+                    $response[] = [
+                        'file_id' => $file->file_id,
+                        'name' => $file->name,
+                        'url' => $file->file_path,
+                        'accesses' => [
+                            'fullname' => $user->first_name . ' ' . $user->last_name,
+                            'email' => $user->email,
+                            'type' => $access->type,
+                        ]
+                    ];
+
+                }
+            }
+        }
+
+        return response()->json($response);
     }
 
     private function expolodeURL($url)
